@@ -37,18 +37,21 @@ function isAdmin(email){
 async function previousPage(data) {
    
     try {
+      //empty array
       let products = [];
-      const prev = await admin.firestore().collection(Constant.collectionNames.PRODUCT)
-        .orderBy('name')
-        .endBefore(data.name)
-        .limitToLast(8)
-        .get();
-      prev.forEach(doc => {
-        // Define 5 variables and assign them concurrently
+      //grabs the 8 products from the last with the name in the collection
+      const previous = await admin.firestore().collection(Constant.collectionNames.PRODUCT)
+            .orderBy('name')
+            .endBefore(data.name)
+            .limitToLast(8)
+            .get();
+      previous.forEach(doc => {
+        //deserialize object 
         const { name, price, summary, imageName, imageURL } = doc.data();
+        //convert to json object
         const p = { name, price, summary, imageName, imageURL };
         p.docId = doc.id;
-  
+        //pushes json product object to array
         products.push(p);
       });
   
@@ -64,17 +67,19 @@ async function nextPage(data) {
   
     try {
       let products = [];
+      //grabs the next 8 products with the name in the collection
       const next = await admin.firestore().collection(Constant.collectionNames.PRODUCT)
-        .orderBy('name')
-        .startAfter(data.name)
-        .limit(8)
-        .get();
+            .orderBy('name')
+            .startAfter(data.name)
+            .limit(8)
+            .get();
       next.forEach(doc => {
-        // Define 5 variables and assign them concurrently
+        //deserialize object
         const { name, price, summary, imageName, imageURL } = doc.data();
+        //convert to json object
         const p = { name, price, summary, imageName, imageURL };
         p.docId = doc.id;
-  
+        //pushes json product object to array
         products.push(p);
       });
   
